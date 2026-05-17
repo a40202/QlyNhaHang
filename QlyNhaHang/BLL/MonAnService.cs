@@ -17,11 +17,14 @@ namespace QlyNhaHang.BLL
             _dal = new MonAnDAL();
         }
 
-        public List<MonAn> GetAllMonAn()
+        public List<MonAn> GetAll()
         {
             return _dal.GetAll();
         }
-
+        public MonAn GetById(int maMon)
+        {
+            return _dal.GetById(maMon);
+        }
         public List<MonAn> TimKiemMonAn(string keyword, int maDanhMuc = 0)
         {
             return _dal.Search(keyword, maDanhMuc);

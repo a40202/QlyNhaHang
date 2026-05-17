@@ -43,7 +43,7 @@ namespace QlyNhaHang.Forms
         {
             TinhThanhToan();
         }
-        private void txtGiamGia_TextChanged(object sender, EventArgs e)
+        private void nudGiamGiaPhanTram_ValueChanged(object sender, EventArgs e)
         {
             TinhThanhToan();
         }
@@ -52,9 +52,11 @@ namespace QlyNhaHang.Forms
             try
             {
                 decimal tongTien = decimal.TryParse(txtTongTien.Text, out decimal tt) ? tt : 0;
-                decimal giamGia = decimal.TryParse(txtGiamGia.Text, out decimal gg) ? gg : 0;
+                decimal phanTramGiam = nudGiamGiaPhanTram.Value;
 
-                decimal thanhToan = tongTien - giamGia;
+                decimal tienGiam = tongTien * (phanTramGiam / 100);
+                decimal thanhToan = tongTien - tienGiam;
+
                 if (thanhToan < 0) thanhToan = 0;
 
                 txtThanhToan.Text = thanhToan.ToString("N0");
@@ -66,6 +68,7 @@ namespace QlyNhaHang.Forms
         }
         private void LoadThongTinNhanVien()
         {
+            txtMaNhanVien.Text = CurrentUser.MaNV.ToString();
             txtNhanVien.Text = CurrentUser.HoTen + " (" + CurrentUser.VaiTro + ")";
         }
         private void label5_Click(object sender, EventArgs e)
@@ -84,11 +87,11 @@ namespace QlyNhaHang.Forms
         {
             if (cboBanAn.SelectedValue == null)
             {
-                MessageBox.Show("Vui lòng chọn bàn ăn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng chọn bàn ăn!", "Thông báo");
                 return;
             }
 
-            if (string.IsNullOrEmpty(txtTongTien.Text) || decimal.Parse(txtTongTien.Text) <= 0)
+            if (!decimal.TryParse(txtTongTien.Text, out decimal tongTien) || tongTien <= 0)
             {
                 MessageBox.Show("Vui lòng nhập Tổng tiền hợp lệ!", "Thông báo");
                 return;
@@ -96,9 +99,9 @@ namespace QlyNhaHang.Forms
 
             try
             {
-                decimal tongTien = decimal.Parse(txtTongTien.Text);
-                decimal giamGia = string.IsNullOrEmpty(txtGiamGia.Text) ? 0 : decimal.Parse(txtGiamGia.Text);
-                decimal thanhToan = tongTien - giamGia;
+                decimal phanTramGiam = nudGiamGiaPhanTram.Value;
+                decimal tienGiam = tongTien * (phanTramGiam / 100);
+                decimal thanhToan = tongTien - tienGiam;
 
                 var hoaDonMoi = new HoaDon
                 {
@@ -106,7 +109,7 @@ namespace QlyNhaHang.Forms
                     MaNV = CurrentUser.MaNV,
                     NgayLap = dtpNgayLap.Value,
                     TongTien = tongTien,
-                    GiamGia = giamGia,
+                    GiamGia = tienGiam,           // Lưu số tiền giảm
                     ThanhToan = thanhToan,
                     TrangThai = cboTrangThai.SelectedItem?.ToString() ?? "ChuaThanhToan"
                 };
@@ -127,12 +130,16 @@ namespace QlyNhaHang.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi thêm hóa đơn:\n" + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);    
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+   
+        private void btnHuy_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
-        private void nudGiamGia_ValueChanged(object sender, EventArgs e)
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }

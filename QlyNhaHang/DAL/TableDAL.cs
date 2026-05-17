@@ -88,7 +88,22 @@ namespace QlyNhaHang.DAL
                 }
             }
         }
+        public bool CapNhatTrangThaiBan(int maBan, string trangThai)
+        {
+            using (MySqlConnection conn = DataAccess.GetConnection())
+            {
+                string query = "UPDATE BanAn SET TrangThai = @TrangThai WHERE MaBan = @MaBan";
 
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@TrangThai", trangThai);
+                    cmd.Parameters.AddWithValue("@MaBan", maBan);
+
+                    conn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
         /// <summary>
         /// Xóa bàn ăn
         /// </summary>

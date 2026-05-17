@@ -50,7 +50,7 @@ namespace QlyNhaHang.Forms
                     this.Hide();
 
                     // Mở Form Main
-                    frmBanAn mainForm = new frmBanAn();
+                    frmMain mainForm = new frmMain();
                     mainForm.ShowDialog();
 
                     // Sau khi đóng Main thì đóng luôn Login
@@ -75,6 +75,11 @@ namespace QlyNhaHang.Forms
         private void frmLogin_Load(object sender, EventArgs e)
         {
             txtUsername.Focus();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

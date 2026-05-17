@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using QlyNhaHang.Helpers;
 using QlyNhaHang.Models;
 using QLyNhaHang.DAL;
 using System;
@@ -168,21 +169,37 @@ namespace QlyNhaHang.DAL
         }
         public bool ThemHoaDon(HoaDon hoaDon)
         {
+            if (hoaDon.MaNV <= 0)
+            {
+                throw new Exception("Mã nhân viên không hợp lệ. Vui lòng đăng nhập lại.");
+            }
+
+            if (hoaDon.MaBan <= 0)
+            {
+                throw new Exception("Mã bàn không hợp lệ.");
+            }
+
             using (MySqlConnection conn = DataAccess.GetConnection())
             {
                 string query = @"
-            INSERT INTO HoaDon (MaBan, MaNV, NgayLap, TongTien, GiamGia, ThanhToan, TrangThai) 
-            VALUES (@MaBan, @MaNV, @NgayLap, 0, @GiamGia, 0, 'ChuaThanhToan')";
+            INSERT INTO HoaDon 
+                (MaBan, MaNV, NgayLap, TongTien, GiamGia, ThanhToan, TrangThai) 
+            VALUES 
+                (@MaBan, @MaNV, @NgayLap, @TongTien, @GiamGia, @ThanhToan, @TrangThai)";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@MaBan", hoaDon.MaBan);
                     cmd.Parameters.AddWithValue("@MaNV", hoaDon.MaNV);
                     cmd.Parameters.AddWithValue("@NgayLap", hoaDon.NgayLap);
-                    cmd.Parameters.AddWithValue("@GiamGia", hoaDon.GiamGia);
+                    cmd.Parameters.AddWithValue("@TongTien", hoaDon.TongTien);
+                    cmd.Parameters.AddWithValue("@GiamGia", hoaDon.GiamGia);           // Số tiền giảm
+                    cmd.Parameters.AddWithValue("@ThanhToan", hoaDon.ThanhToan);
+                    cmd.Parameters.AddWithValue("@TrangThai", hoaDon.TrangThai);
 
                     conn.Open();
-                    return cmd.ExecuteNonQuery() > 0;
+                    int result = cmd.ExecuteNonQuery();
+                    return result > 0;
                 }
             }
         }
@@ -200,7 +217,183 @@ namespace QlyNhaHang.DAL
                 }
             }
         }
+        public bool CapNhatHoaDon(int maHD, int maBanMoi, decimal tongTien, decimal giamGia, decimal thanhToan, string trangThai)
+        {
+            using (MySqlConnection conn = DataAccess.GetConnection())
+            {
+                string query = @"
+            UPDATE HoaDon 
+            SET MaBan = @MaBanMoi,
+                TongTien = @TongTien,
+                GiamGia = @GiamGia,
+                ThanhToan = @ThanhToan,
+                TrangThai = @TrangThai
+            WHERE MaHD = @MaHD";
 
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaHD", maHD);
+                    cmd.Parameters.AddWithValue("@MaBanMoi", maBanMoi);
+                    cmd.Parameters.AddWithValue("@TongTien", tongTien);
+                    cmd.Parameters.AddWithValue("@GiamGia", giamGia);
+                    cmd.Parameters.AddWithValue("@ThanhToan", thanhToan);
+                    cmd.Parameters.AddWithValue("@TrangThai", trangThai);
+
+                    conn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        public List<HoaDon> TimKiemHoaDon(string keyword, DateTime tuNgay, DateTime denNgay, string trangThai = "Tất cả")
+        {
+            List<HoaDon> list = new List<HoaDon>();
+
+            using (MySqlConnection conn = DataAccess.GetConnection())
+            {
+                string query = @"
+            SELECT hd.*, nv.HoTen AS TenNhanVien, ba.TenBan 
+            FROM HoaDon hd
+            LEFT JOIN NhanVien nv ON hd.MaNV = nv.MaNV
+            LEFT JOIN BanAn ba ON hd.MaBan = ba.MaBan
+            WHERE hd.NgayLap BETWEEN @TuNgay AND @DenNgay";
+
+                if (!string.IsNullOrEmpty(keyword))
+                    query += " AND (hd.MaHD LIKE @keyword OR ba.TenBan LIKE @keyword)";
+
+                if (trangThai != "Tất cả")
+                    query += " AND hd.TrangThai = @TrangThai";
+
+                query += " ORDER BY hd.MaHD DESC";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@TuNgay", tuNgay);
+                    cmd.Parameters.AddWithValue("@DenNgay", denNgay);
+
+                    if (!string.IsNullOrEmpty(keyword))
+                        cmd.Parameters.AddWithValue("@keyword", "%" + keyword + "%");
+
+                    if (trangThai != "Tất cả")
+                        cmd.Parameters.AddWithValue("@TrangThai", trangThai);
+
+                    conn.Open();
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new HoaDon
+                            {
+                                MaHD = Convert.ToInt32(reader["MaHD"]),
+                                MaBan = Convert.ToInt32(reader["MaBan"]),
+                                TenBan = reader["TenBan"]?.ToString(),
+                                MaNV = Convert.ToInt32(reader["MaNV"]),
+                                TenNhanVien = reader["TenNhanVien"]?.ToString(),
+                                NgayLap = Convert.ToDateTime(reader["NgayLap"]),
+                                TongTien = Convert.ToDecimal(reader["TongTien"]),
+                                GiamGia = Convert.ToDecimal(reader["GiamGia"]),
+                                ThanhToan = Convert.ToDecimal(reader["ThanhToan"]),
+                                TrangThai = reader["TrangThai"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+        public bool ThanhToanHoaDon(int maBan, decimal giamGia = 0)
+        {
+            using (MySqlConnection conn = DataAccess.GetConnection())
+            {
+                conn.Open();
+                using (MySqlTransaction tran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        // 1. Tính tổng tiền từ OrderTam             
+                        decimal tongTien = 0;
+                        string sumQuery = "SELECT SUM(SoLuong * DonGia) FROM OrderTam WHERE MaBan = @MaBan";
+                        using (MySqlCommand cmdSum = new MySqlCommand(sumQuery, conn, tran))
+                        {
+                            cmdSum.Parameters.AddWithValue("@MaBan", maBan);
+                            object result = cmdSum.ExecuteScalar();
+                            tongTien = result != DBNull.Value ? Convert.ToDecimal(result) : 0;
+                        }
+
+                        decimal thanhToan = tongTien - giamGia*tongTien/100;
+
+                        // 2. Tạo hóa đơn thanh toán
+                        string insertHoaDon = @"
+                    INSERT INTO HoaDon (MaBan, MaNV, TongTien, GiamGia, ThanhToan, TrangThai)
+                    VALUES (@MaBan, @MaNV, @TongTien, @GiamGia, @ThanhToan, 'ChuaThanhToan')";
+
+                        using (MySqlCommand cmd1 = new MySqlCommand(insertHoaDon, conn, tran))
+                        {
+                            cmd1.Parameters.AddWithValue("@MaBan", maBan);
+                            cmd1.Parameters.AddWithValue("@MaNV", CurrentUser.MaNV);
+                            cmd1.Parameters.AddWithValue("@TongTien", tongTien);
+                            cmd1.Parameters.AddWithValue("@GiamGia", giamGia);
+                            cmd1.Parameters.AddWithValue("@ThanhToan", thanhToan);
+                            cmd1.ExecuteNonQuery();
+                        }
+
+                        // 3. Chuyển chi tiết món sang ChiTietHoaDon
+                        string insertChiTiet = @"
+                    INSERT INTO ChiTietHoaDon (MaHD, MaMon, SoLuong, DonGia)
+                    SELECT LAST_INSERT_ID(), MaMon, SoLuong, DonGia 
+                    FROM OrderTam WHERE MaBan = @MaBan";
+
+                        using (MySqlCommand cmd2 = new MySqlCommand(insertChiTiet, conn, tran))
+                        {
+                            cmd2.Parameters.AddWithValue("@MaBan", maBan);
+                            cmd2.ExecuteNonQuery();
+                        }
+
+                        // 4. Xóa toàn bộ OrderTam của bàn
+                        string deleteOrder = "DELETE FROM OrderTam WHERE MaBan = @MaBan";
+                        using (MySqlCommand cmd3 = new MySqlCommand(deleteOrder, conn, tran))
+                        {
+                            cmd3.Parameters.AddWithValue("@MaBan", maBan);
+                            cmd3.ExecuteNonQuery();
+                        }
+
+                        // 5. Cập nhật trạng thái bàn về Trống
+                        string updateBan = "UPDATE BanAn SET TrangThai = 'Trống' WHERE MaBan = @MaBan";
+                        using (MySqlCommand cmd4 = new MySqlCommand(updateBan, conn, tran))
+                        {
+                            cmd4.Parameters.AddWithValue("@MaBan", maBan);
+                            cmd4.ExecuteNonQuery();
+                        }
+
+                        tran.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        tran.Rollback();
+                        Console.WriteLine("Transaction Error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+        public bool ThanhToanHoaDonByMaHD(int maHD)
+        {
+            using (MySqlConnection conn = DataAccess.GetConnection())
+            {
+                string query = @"
+            UPDATE HoaDon 
+            SET TrangThai = 'DaThanhToan', 
+                ThanhToan = TongTien - GiamGia 
+            WHERE MaHD = @MaHD AND TrangThai = 'ChuaThanhToan'";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaHD", maHD);
+                    conn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
         public bool HuyHoaDon(int maHD)
         {
             using (MySqlConnection conn = DataAccess.GetConnection())
@@ -264,51 +457,6 @@ namespace QlyNhaHang.DAL
                     }
                 }
             }
-        }
-        /// <summary>
-        /// Thanh toán hóa đơn
-        /// </summary>
-        public bool ThanhToan(int maBan, decimal giamGia = 0)
-        {
-            using (MySqlConnection conn = DataAccess.GetConnection())
-            {
-                conn.Open();
-                using (MySqlTransaction tran = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        // Cập nhật trạng thái hóa đơn
-                        string query = @"UPDATE HoaDon 
-                                       SET TrangThai = 'DaThanhToan', 
-                                           ThanhToan = TongTien - @GiamGia,
-                                           GiamGia = @GiamGia
-                                       WHERE MaBan = @MaBan AND TrangThai = 'ChuaThanhToan'";
-
-                        using (MySqlCommand cmd = new MySqlCommand(query, conn, tran))
-                        {
-                            cmd.Parameters.AddWithValue("@MaBan", maBan);
-                            cmd.Parameters.AddWithValue("@GiamGia", giamGia);
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        // Cập nhật trạng thái bàn thành Trống
-                        string updateBan = "UPDATE BanAn SET TrangThai = 'Trống' WHERE MaBan = @MaBan";
-                        using (MySqlCommand cmd2 = new MySqlCommand(updateBan, conn, tran))
-                        {
-                            cmd2.Parameters.AddWithValue("@MaBan", maBan);
-                            cmd2.ExecuteNonQuery();
-                        }
-
-                        tran.Commit();
-                        return true;
-                    }
-                    catch
-                    {
-                        tran.Rollback();
-                        return false;
-                    }
-                }
-            }
-        }
+        }   
     }
 }

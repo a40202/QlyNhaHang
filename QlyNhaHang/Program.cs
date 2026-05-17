@@ -16,7 +16,7 @@ namespace QlyNhaHang
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmBanAn());
+            Application.Run(new frmLogin());
         }
     }
 }

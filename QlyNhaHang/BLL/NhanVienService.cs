@@ -34,5 +34,9 @@ namespace QlyNhaHang.BLL
 
             return _dal.DangNhap(taiKhoan, matKhau);
         }
+        public bool DoiMatKhau(int maNV, string matKhauCu, string matKhauMoi)
+        {
+            return _dal.DoiMatKhau(maNV, matKhauCu, matKhauMoi);
+        }
     }
 }

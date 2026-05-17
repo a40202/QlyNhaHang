@@ -47,5 +47,25 @@ namespace QlyNhaHang.DAL
             }
             return null; // Đăng nhập thất bại
         }
+        public bool DoiMatKhau(int maNV, string matKhauCu, string matKhauMoi)
+        {
+            using (MySqlConnection conn = DataAccess.GetConnection())
+            {
+                string query = @"
+            UPDATE NhanVien 
+            SET MatKhau = @MatKhauMoi 
+            WHERE MaNV = @MaNV AND MatKhau = @MatKhauCu";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    cmd.Parameters.AddWithValue("@MatKhauCu", matKhauCu);
+                    cmd.Parameters.AddWithValue("@MatKhauMoi", matKhauMoi);
+
+                    conn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
     }
 }

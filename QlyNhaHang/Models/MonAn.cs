@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace QlyNhaHang.Models
 {
-    /// <summary>
-    /// Lớp đại diện cho Món ăn
-    /// </summary>
     public class MonAn
     {
         public int MaMon { get; set; }
         public string TenMon { get; set; }
         public int MaDanhMuc { get; set; }
-        public string TenDanhMuc { get; set; }   // Dùng để hiển thị
+        public string TenDanhMuc { get; set; }
         public decimal Gia { get; set; }
         public string MoTa { get; set; }
         public string HinhAnh { get; set; }

@@ -44,9 +44,21 @@ namespace QlyNhaHang.BLL
         {
             return _dal.CapNhatGiamGia(maHD, giamGia);
         }
+        public bool CapNhatHoaDon(int maHD, int maBanMoi, decimal tongTien, decimal giamGia, decimal thanhToan, string trangThai)
+        {
+            return _dal.CapNhatHoaDon(maHD, maBanMoi, tongTien, giamGia, thanhToan, trangThai);
+        }
         public bool ThanhToanHoaDon(int maBan, decimal giamGia = 0)
         {
-            return _dal.ThanhToan(maBan, giamGia);
+            return _dal.ThanhToanHoaDon(maBan, giamGia);
         }
+        public List<HoaDon> TimKiemHoaDon(string keyword, DateTime tuNgay, DateTime denNgay, string trangThai = "Tất cả")
+        {
+            return _dal.TimKiemHoaDon(keyword, tuNgay, denNgay, trangThai);
+        }
+        public bool ThanhToanHoaDonByMaHD(int maHD)
+        {
+            return _dal.ThanhToanHoaDonByMaHD(maHD);
+        }    
     }
 }

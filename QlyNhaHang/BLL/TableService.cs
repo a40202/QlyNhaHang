@@ -36,5 +36,10 @@ namespace QlyNhaHang.BLL
         {
             return _dal.Delete(maBan);
         }
+
+        public bool CapNhatTrangThaiBan(int maBan, string trangThai)
+        {
+            return _dal.CapNhatTrangThaiBan(maBan, trangThai);
+        }
     }
 }

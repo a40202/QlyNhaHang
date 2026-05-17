@@ -29,5 +29,10 @@ namespace QlyNhaHang.Helpers
             TaiKhoan = "";
             VaiTro = "";
         }
+
+        public static bool IsAdmin() => VaiTro?.ToUpper() == "ADMIN";
+        public static bool IsPhucVu() => VaiTro == "Phục vụ";
+        public static bool IsThuNgan() => VaiTro == "Thu ngân";
+        public static bool IsBep() => VaiTro == "Bếp";
     }
 }
