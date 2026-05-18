@@ -121,6 +121,7 @@ namespace QlyNhaHang.Forms
             else if (CurrentUser.IsPhucVu())
             {
                 btnQuanLyBanAn.Visible = true;
+                btnQuanLyHoaDon.Visible = true;
             }
             else
             {

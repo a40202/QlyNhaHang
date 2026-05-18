@@ -58,9 +58,9 @@ namespace QlyNhaHang.Forms
                 dtpNgayLap.Value = _hoaDonHienTai.NgayLap;
 
                 txtTongTien.Text = _hoaDonHienTai.TongTien.ToString("N0");
-                nudGiamGiaPhanTram.Value = 0; // Mặc định 0%, sẽ tính lại sau
+                nudGiamGiaPhanTram.Value = 0;
 
-                // Tính giảm giá theo % từ số tiền giảm hiện tại
+                
                 if (_hoaDonHienTai.TongTien > 0)
                 {
                     decimal phanTram = (_hoaDonHienTai.GiamGia / _hoaDonHienTai.TongTien) * 100;

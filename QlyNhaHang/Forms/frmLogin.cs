@@ -29,31 +29,32 @@ namespace QlyNhaHang.Forms
         {
             string taiKhoan = txtUsername.Text.Trim();
             string matKhau = txtPassword.Text.Trim();
+
             if (string.IsNullOrWhiteSpace(taiKhoan) || string.IsNullOrWhiteSpace(matKhau))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ Tài khoản và Mật khẩu!",
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
             try
             {
                 NhanVien nhanVien = _nhanVienService.DangNhap(taiKhoan, matKhau);
 
                 if (nhanVien != null)
                 {
-                    // Lưu thông tin người dùng hiện tại
                     CurrentUser.SetCurrentUser(nhanVien);
 
-                    MessageBox.Show($"Đăng nhập thành công!\n\nXin chào: {nhanVien.HoTen}\nVai trò: {nhanVien.VaiTro}",
+                    MessageBox.Show($"Đăng nhập thành công!\n\n" +
+                                  $"Xin chào: {nhanVien.HoTen}\n" +
+                                  $"Vai trò: {nhanVien.VaiTro}",
                         "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.Hide();
 
-                    // Mở Form Main
                     frmMain mainForm = new frmMain();
                     mainForm.ShowDialog();
 
-                    // Sau khi đóng Main thì đóng luôn Login
                     this.Close();
                 }
                 else
@@ -67,7 +68,7 @@ namespace QlyNhaHang.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi kết nối hoặc hệ thống:\n" + ex.Message,
+                MessageBox.Show("Lỗi hệ thống:\n" + ex.Message,
                     "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

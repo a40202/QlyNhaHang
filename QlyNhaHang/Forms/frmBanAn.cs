@@ -17,7 +17,7 @@ namespace QlyNhaHang.Forms
 
 
         private List<BanAn> danhSachBan;
-        private int _maBanHienTai = 0;   // Quan trọng: lưu bàn đang chọn
+        private int _maBanHienTai = 0;  
 
         public frmBanAn()
         {
@@ -39,7 +39,6 @@ namespace QlyNhaHang.Forms
             flpBanAn.Padding = new Padding(10);
         }
 
-        // ====================== TẢI DANH SÁCH BÀN ======================
         private void LoadDanhSachBan()
         {
             flpBanAn.Controls.Clear();
@@ -73,7 +72,7 @@ namespace QlyNhaHang.Forms
                 FlatAppearance = { BorderSize = 0 }
             };
 
-            // Xử lý màu theo trạng thái
+            // set màu theo trạng thái
             string trangThai = ban.TrangThai.ToLower().Trim();
 
             if (trangThai.Contains("trống") || trangThai == "trong")
@@ -85,15 +84,10 @@ namespace QlyNhaHang.Forms
             {
                 btn.BackColor = Color.FromArgb(255, 51, 51);     // Đỏ
                 btn.ForeColor = Color.White;
-            }
-            else if (trangThai.Contains("đặt trước") || trangThai.Contains("dattruoc"))
-            {
-                btn.BackColor = Color.FromArgb(255, 215, 0);     // Vàng
-                btn.ForeColor = Color.Black;
-            }
+            }          
             else
             {
-                // Mặc định (trường hợp xám như Bàn 2)
+                // Mặc định 
                 btn.BackColor = Color.FromArgb(128, 128, 128);   // Xám
                 btn.ForeColor = Color.White;
             }
@@ -102,7 +96,7 @@ namespace QlyNhaHang.Forms
             return btn;
         }
 
-        // ====================== CLICK VÀO BÀN ======================
+        // ================== CLICK VÀO BÀN =================
         private void Ban_Click(BanAn ban)
         {
             _maBanHienTai = ban.MaBan;
@@ -116,16 +110,14 @@ namespace QlyNhaHang.Forms
 
             if (ban.TrangThai.ToLower().Contains("trống"))
             {
-                // Bàn trống → Mở form gọi món
+                // Bàn trống - Mở form gọi món
                 frmOrder f = new frmOrder(ban.MaBan);
                 f.ShowDialog();
-
-                // Sau khi đóng form Order, refresh lại sơ đồ bàn
                 LoadDanhSachBan();
             }
             else
             {
-                // Bàn đang có khách → hiển thị danh sách món đã order
+                // Bàn đang có khách - hiển thị danh sách món đã order
                 LoadChiTietHoaDon(ban.MaBan);
                 btnChuyenBan.Enabled = true;
                 btnThanhToan.Enabled = true;
@@ -173,7 +165,7 @@ namespace QlyNhaHang.Forms
             }
         }
 
-        // ====================== NÚT CHỨC NĂNG ======================
+        // ================ NÚT CHỨC NĂNG ===================
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             LoadDanhSachBan();
@@ -231,13 +223,9 @@ namespace QlyNhaHang.Forms
                     MessageBox.Show("Thanh toán thành công!\n" +
                                   "Hóa đơn đã được lưu và bàn đã trở về trạng thái Trống.",
                         "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Reset giao diện
                     dgvHoaDon.DataSource = null;
                     lblTongTien.Text = "0 VNĐ";
                     nudGiamGia.Value = 0;
-
-                    // Refresh sơ đồ bàn
                     LoadDanhSachBan();
                 }
                 else
@@ -255,14 +243,10 @@ namespace QlyNhaHang.Forms
                 MessageBox.Show("Vui lòng chọn một bàn trước khi thêm món!", "Thông báo");
                 return;
             }
-
-            // Mở form Order để thêm món
             frmOrder f = new frmOrder(_maBanHienTai);
             f.ShowDialog();
-
-            // Sau khi đóng form Order, refresh lại dữ liệu
-            LoadDanhSachBan();           // Cập nhật màu bàn
-            LoadChiTietHoaDon(_maBanHienTai); // Cập nhật danh sách món nếu bàn đang sử dụng
+            LoadDanhSachBan();           
+            LoadChiTietHoaDon(_maBanHienTai); 
         }
 
         private void dgvHoaDon_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -286,7 +270,7 @@ namespace QlyNhaHang.Forms
             frmChuyenBan f = new frmChuyenBan(_maBanHienTai);
             if (f.ShowDialog() == DialogResult.OK)
             {
-                LoadDanhSachBan();        // Refresh sơ đồ bàn
+                LoadDanhSachBan();        
                 dgvHoaDon.DataSource = null;
                 lblTongTien.Text = "0 VNĐ";
                 _maBanHienTai = 0;

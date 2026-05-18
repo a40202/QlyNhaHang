@@ -123,6 +123,16 @@ namespace QlyNhaHang.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap OAK3ZH0 {
+            get {
+                object obj = ResourceManager.GetObject("OAK3ZH0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap payments_20dp_FFFFFF_FILL1_wght400_GRAD0_opsz20 {
             get {
                 object obj = ResourceManager.GetObject("payments_20dp_FFFFFF_FILL1_wght400_GRAD0_opsz20", resourceCulture);

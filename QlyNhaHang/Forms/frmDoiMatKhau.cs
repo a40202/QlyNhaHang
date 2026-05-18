@@ -28,6 +28,7 @@ namespace QlyNhaHang.Forms
         private void frmDoiMatKhau_Load(object sender, EventArgs e)
         {
             this.Text = "Đổi Mật Khẩu";
+
             txtMatKhauCu.PasswordChar = '*';
             txtMatKhauMoi.PasswordChar = '*';
             txtNhapLai.PasswordChar = '*';
@@ -40,7 +41,9 @@ namespace QlyNhaHang.Forms
             string nhapLai = txtNhapLai.Text.Trim();
 
             // Kiểm tra dữ liệu đầu vào
-            if (string.IsNullOrEmpty(matKhauCu) || string.IsNullOrEmpty(matKhauMoi) || string.IsNullOrEmpty(nhapLai))
+            if (string.IsNullOrWhiteSpace(matKhauCu) ||
+                string.IsNullOrWhiteSpace(matKhauMoi) ||
+                string.IsNullOrWhiteSpace(nhapLai))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -49,7 +52,7 @@ namespace QlyNhaHang.Forms
 
             if (matKhauMoi != nhapLai)
             {
-                MessageBox.Show("Mật khẩu mới và nhập lại không khớp!", "Lỗi",
+                MessageBox.Show("Mật khẩu mới và Nhập lại không khớp!", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtNhapLai.Clear();
                 txtNhapLai.Focus();
@@ -83,7 +86,7 @@ namespace QlyNhaHang.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi đổi mật khẩu: " + ex.Message, "Lỗi",
+                MessageBox.Show("Lỗi khi đổi mật khẩu:\n" + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

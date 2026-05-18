@@ -16,17 +16,13 @@ namespace QlyNhaHang.BLL
         {
             return _dal.GetByBan(maBan);
         }
-        // -------------Chuyen ban--------------
         public bool ChuyenBan(int maBanCu, int maBanMoi)
         {
             bool success = _dal.ChuyenBan(maBanCu, maBanMoi);
 
             if (success)
-            {
-                // Cập nhật trạng thái bàn cũ về Trống
+            {           
                 _banAnService.CapNhatTrangThaiBan(maBanCu, "Trống");
-
-                // Cập nhật trạng thái bàn mới thành Đang sử dụng
                 _banAnService.CapNhatTrangThaiBan(maBanMoi, "Đang Sử Dụng");
             }
 
@@ -43,7 +39,6 @@ namespace QlyNhaHang.BLL
 
             if (ok)
             {
-                // Tự động chuyển trạng thái bàn
                 _banAnService.CapNhatTrangThaiBan(maBan, "Đang Sử Dụng");
             }
 

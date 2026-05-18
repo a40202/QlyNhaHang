@@ -61,15 +61,15 @@ namespace QlyNhaHang.Models
         public decimal DoanhThu { get; set; }
         public int SoHoaDon { get; set; }
         public decimal TrungBinhHD { get; set; }
-        public decimal TangTruong { get; set; }     // % so với tháng trước
+        public decimal TangTruong { get; set; }    
     }
     public class BaoCaoThang
     {
         public int Thang { get; set; }
-        public string TenThang { get; set; }        // Ví dụ: "Tháng 1"
+        public string TenThang { get; set; }       
         public decimal DoanhThu { get; set; }
         public int SoHoaDon { get; set; }
-        public decimal TangTruong { get; set; }     // % so với tháng trước
+        public decimal TangTruong { get; set; }     
     }
 
     public class BaoCaoNgay
@@ -78,6 +78,6 @@ namespace QlyNhaHang.Models
         public string NgayHienThi { get; set; }
         public decimal DoanhThu { get; set; }
         public int SoHoaDon { get; set; }
-        public decimal TangTruong { get; set; } // ← thêm nếu chưa có
+        public decimal TangTruong { get; set; } 
     }
 }

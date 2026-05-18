@@ -19,12 +19,14 @@ namespace QlyNhaHang.Models
 
         public MonAn() { }
 
-        public MonAn(int maMon, string tenMon, decimal gia)
+        public MonAn(int maMon, string tenMon, decimal gia, string moTa, int maDanhMuc, bool trangThai)
         {
             MaMon = maMon;
             TenMon = tenMon;
             Gia = gia;
-            TrangThai = true;
+            MoTa = moTa;
+            MaDanhMuc = maDanhMuc;
+            TrangThai = trangThai;
         }
     }
 }

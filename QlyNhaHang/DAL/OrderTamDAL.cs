@@ -110,7 +110,6 @@ namespace QlyNhaHang.DAL
                 {
                     try
                     {
-                        // Chuyển order sang bàn mới
                         string updateQuery = "UPDATE OrderTam SET MaBan = @MaBanMoi WHERE MaBan = @MaBanCu";
                         using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn, tran))
                         {

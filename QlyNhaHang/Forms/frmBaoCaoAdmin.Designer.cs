@@ -28,24 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.mySqlDataAdapter1 = new MySql.Data.MySqlClient.MySqlDataAdapter();
-            this.btnXem = new System.Windows.Forms.Button();
             this.nudNam = new System.Windows.Forms.NumericUpDown();
             this.cboThang = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.lblTongHoaDonNam = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblTangTruong = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lblTongDoanhThuNam = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.dgvBaoCao = new System.Windows.Forms.DataGridView();
-            this.lblTangTruong = new System.Windows.Forms.Label();
             this.chartBaoCao = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.nudNam)).BeginInit();
             this.panel2.SuspendLayout();
@@ -61,16 +60,6 @@
             this.mySqlDataAdapter1.InsertCommand = null;
             this.mySqlDataAdapter1.SelectCommand = null;
             this.mySqlDataAdapter1.UpdateCommand = null;
-            // 
-            // btnXem
-            // 
-            this.btnXem.Location = new System.Drawing.Point(326, 147);
-            this.btnXem.Name = "btnXem";
-            this.btnXem.Size = new System.Drawing.Size(75, 23);
-            this.btnXem.TabIndex = 2;
-            this.btnXem.Text = "button1";
-            this.btnXem.UseVisualStyleBackColor = true;
-            this.btnXem.Click += new System.EventHandler(this.btnXem_Click);
             // 
             // nudNam
             // 
@@ -91,7 +80,7 @@
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.panel2.BackColor = System.Drawing.Color.Chocolate;
             this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.lblTongHoaDonNam);
             this.panel2.Location = new System.Drawing.Point(197, 3);
@@ -103,6 +92,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label3.Location = new System.Drawing.Point(21, 24);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 15);
@@ -113,6 +103,7 @@
             // 
             this.lblTongHoaDonNam.AutoSize = true;
             this.lblTongHoaDonNam.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblTongHoaDonNam.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lblTongHoaDonNam.Location = new System.Drawing.Point(21, 50);
             this.lblTongHoaDonNam.Name = "lblTongHoaDonNam";
             this.lblTongHoaDonNam.Size = new System.Drawing.Size(14, 15);
@@ -121,19 +112,32 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.panel1.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.panel1.BackgroundImage = global::QlyNhaHang.Properties.Resources.OAK3ZH0;
             this.panel1.Controls.Add(this.lblTangTruong);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.lblTongDoanhThuNam);
+            this.panel1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(188, 106);
             this.panel1.TabIndex = 9;
             // 
+            // lblTangTruong
+            // 
+            this.lblTangTruong.AutoSize = true;
+            this.lblTangTruong.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTangTruong.Location = new System.Drawing.Point(13, 74);
+            this.lblTangTruong.Name = "lblTangTruong";
+            this.lblTangTruong.Size = new System.Drawing.Size(26, 15);
+            this.lblTangTruong.TabIndex = 4;
+            this.lblTangTruong.Text = "lbel";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label1.Location = new System.Drawing.Point(13, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 15);
@@ -144,6 +148,7 @@
             // 
             this.lblTongDoanhThuNam.AutoSize = true;
             this.lblTongDoanhThuNam.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblTongDoanhThuNam.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lblTongDoanhThuNam.Location = new System.Drawing.Point(13, 50);
             this.lblTongDoanhThuNam.Name = "lblTongDoanhThuNam";
             this.lblTongDoanhThuNam.Size = new System.Drawing.Size(14, 15);
@@ -188,28 +193,18 @@
             this.dgvBaoCao.Size = new System.Drawing.Size(384, 362);
             this.dgvBaoCao.TabIndex = 0;
             // 
-            // lblTangTruong
-            // 
-            this.lblTangTruong.AutoSize = true;
-            this.lblTangTruong.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTangTruong.Location = new System.Drawing.Point(13, 74);
-            this.lblTangTruong.Name = "lblTangTruong";
-            this.lblTangTruong.Size = new System.Drawing.Size(26, 15);
-            this.lblTangTruong.TabIndex = 4;
-            this.lblTangTruong.Text = "lbel";
-            // 
             // chartBaoCao
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chartBaoCao.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chartBaoCao.Legends.Add(legend1);
+            chartArea2.Name = "ChartArea1";
+            this.chartBaoCao.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chartBaoCao.Legends.Add(legend2);
             this.chartBaoCao.Location = new System.Drawing.Point(449, 19);
             this.chartBaoCao.Name = "chartBaoCao";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chartBaoCao.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartBaoCao.Series.Add(series2);
             this.chartBaoCao.Size = new System.Drawing.Size(323, 530);
             this.chartBaoCao.TabIndex = 14;
             this.chartBaoCao.Text = "chart1";
@@ -225,7 +220,6 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.cboThang);
             this.Controls.Add(this.nudNam);
-            this.Controls.Add(this.btnXem);
             this.Controls.Add(this.dgvBaoCao);
             this.Name = "frmBaoCaoAdmin";
             this.Text = "frmBaoCaoAdmin";
@@ -246,7 +240,6 @@
         #endregion
 
         private MySql.Data.MySqlClient.MySqlDataAdapter mySqlDataAdapter1;
-        private System.Windows.Forms.Button btnXem;
         private System.Windows.Forms.NumericUpDown nudNam;
         private System.Windows.Forms.ComboBox cboThang;
         private System.Windows.Forms.Panel panel2;

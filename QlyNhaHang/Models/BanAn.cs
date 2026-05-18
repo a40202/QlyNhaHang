@@ -14,7 +14,7 @@ namespace QlyNhaHang.Models
         public int MaBan { get; set; }
         public string TenBan { get; set; }
         public int SoCho { get; set; }
-        public string TrangThai { get; set; }   // Trong, DangSuDung, DatTruoc
+        public string TrangThai { get; set; }   
 
         public BanAn() { }
 

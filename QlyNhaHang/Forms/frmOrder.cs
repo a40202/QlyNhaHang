@@ -34,7 +34,6 @@ namespace QlyNhaHang.Forms
 
                 dgvMonAn.DataSource = danhSach;
 
-                // Format cột
                 if (dgvMonAn.Columns["Gia"] != null)
                     dgvMonAn.Columns["Gia"].DefaultCellStyle.Format = "N0";
 
@@ -157,10 +156,10 @@ namespace QlyNhaHang.Forms
                     string tenMon = _gioHang[index].TenMon;
                     _gioHang.RemoveAt(index);
 
-                    LoadGioHang();   // Refresh giỏ hàng
+                    LoadGioHang();   
 
                     MessageBox.Show($"Đã xóa {tenMon} khỏi giỏ hàng.", "Đã xóa",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
@@ -172,7 +171,7 @@ namespace QlyNhaHang.Forms
         {
             if (e.RowIndex < 0 || dgvGioHang.CurrentRow == null)
             {
-                return; // Không làm gì nếu click vào header hoặc không có dòng
+                return;
             }
 
             try
@@ -180,7 +179,6 @@ namespace QlyNhaHang.Forms
                 int index = e.RowIndex;
                 string tenMon = _gioHang[index].TenMon;
 
-                // Ví dụ: Hiển thị thông tin chi tiết món khi double click
                 MessageBox.Show($"Món: {tenMon}\n" +
                                $"Số lượng: {_gioHang[index].SoLuong}\n" +
                                $"Đơn giá: {_gioHang[index].DonGia:N0} VNĐ",

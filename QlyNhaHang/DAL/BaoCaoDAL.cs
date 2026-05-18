@@ -11,7 +11,6 @@ namespace QlyNhaHang.DAL
 {
     internal class BaoCaoDAL
     {
-        // ====================== BÁO CÁO HÔM NAY ======================
         public BaoCaoHomNay GetBaoCaoHomNay()
         {
             var bc = new BaoCaoHomNay();
@@ -19,8 +18,6 @@ namespace QlyNhaHang.DAL
             using (MySqlConnection conn = DataAccess.GetConnection())
             {
                 conn.Open();
-
-                // Tổng doanh thu + số hóa đơn
                 string sql = @"
                     SELECT SUM(ThanhToan) as TongDoanhThu, COUNT(MaHD) as SoHoaDon 
                     FROM HoaDon 
@@ -37,8 +34,6 @@ namespace QlyNhaHang.DAL
                         }
                     }
                 }
-
-                // Số bàn đã sử dụng
                 string sqlBan = "SELECT COUNT(DISTINCT MaBan) FROM HoaDon WHERE DATE(NgayLap) = CURDATE()";
                 using (MySqlCommand cmd2 = new MySqlCommand(sqlBan, conn))
                 {
@@ -46,7 +41,6 @@ namespace QlyNhaHang.DAL
                     bc.SoBanDaSuDung = rs != DBNull.Value ? Convert.ToInt32(rs) : 0;
                 }
 
-                // Top 5 món bán chạy
                 string sqlTop = @"
                     SELECT m.TenMon, SUM(ct.SoLuong) as SoLuong, SUM(ct.ThanhTien) as ThanhTien
                     FROM ChiTietHoaDon ct
@@ -115,9 +109,6 @@ namespace QlyNhaHang.DAL
                         }
                     }
                 }
-
-                // ====================== TÍNH TĂNG TRƯỞNG ======================
-                // Dùng Dictionary tra theo ngày thực tế, tránh nhảy ngày
                 var dictDoanhThu = list.ToDictionary(x => x.Ngay.Date, x => x.DoanhThu);
 
                 foreach (var item in list)
@@ -132,7 +123,6 @@ namespace QlyNhaHang.DAL
                     }
                     else
                     {
-                        // Ngày trước không có dữ liệu → không tính được
                         item.TangTruong = 0;
                     }
                 }
@@ -147,9 +137,7 @@ namespace QlyNhaHang.DAL
 
             using (MySqlConnection conn = DataAccess.GetConnection())
             {
-                conn.Open();
-
-                // 1. Tổng quan hôm nay / tháng hiện tại
+                conn.Open();         
                 string sqlTong = @"
                     SELECT 
                         SUM(ThanhToan) as TongDoanhThu,
@@ -172,8 +160,6 @@ namespace QlyNhaHang.DAL
                         }
                     }
                 }
-
-                // 2. Doanh thu theo tháng (6 tháng gần nhất)
                 string sqlThang = @"
                     SELECT 
                         CONCAT('T', MONTH(NgayLap)) as Thang,
@@ -200,8 +186,6 @@ namespace QlyNhaHang.DAL
                         }
                     }
                 }
-
-                // 3. Top món ăn bán chạy
                 string sqlTopMon = @"
                     SELECT m.TenMon, SUM(ct.SoLuong) as SoLuong, SUM(ct.ThanhTien) as ThanhTien
                     FROM ChiTietHoaDon ct
@@ -229,7 +213,7 @@ namespace QlyNhaHang.DAL
             }
             return bc;
         }
-        // ====================== BÁO CÁO THEO KHOẢNG THỜI GIAN ======================
+        // ============================================
         public BaoCaoTheoNgay GetBaoCaoTheoNgay(DateTime tuNgay, DateTime denNgay)
         {
             var bc = new BaoCaoTheoNgay();
@@ -270,8 +254,7 @@ namespace QlyNhaHang.DAL
                 }
             }
             return bc;
-        }
-        //====================
+        }   
  
         //======================
         public List<BaoCaoThang> GetBaoCaoTheoNamm(int nam, int? thang = null)
@@ -318,10 +301,9 @@ namespace QlyNhaHang.DAL
                     }
                 }
 
-                // ====================== TÍNH TĂNG TRƯỞNG ======================
+                // =========================================
                 if (thang.HasValue && list.Count == 1)
-                {
-                    // Lọc 1 tháng cụ thể → query thêm tháng trước
+                {           
                     int thangTruoc = thang.Value - 1;
                     int namTruoc = nam;
                     if (thangTruoc == 0) { thangTruoc = 12; namTruoc--; }
@@ -348,7 +330,6 @@ namespace QlyNhaHang.DAL
                 }
                 else
                 {
-                    // Lấy cả năm → dùng dictionary tra theo tháng thực tế (tránh nhảy tháng)
                     var dictDoanhThu = list.ToDictionary(x => x.Thang, x => x.DoanhThu);
 
                     foreach (var item in list)
@@ -364,7 +345,6 @@ namespace QlyNhaHang.DAL
                         }
                         else
                         {
-                            // Tháng trước không có dữ liệu
                             item.TangTruong = 0;
                         }
                     }

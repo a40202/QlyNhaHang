@@ -34,8 +34,7 @@ namespace QlyNhaHang.Forms
             dgvHoaDon.ReadOnly = true;
             dgvHoaDon.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvHoaDon.RowHeadersVisible = false;
-        }
-        // ====================== HIỂN THỊ DANH SÁCH HÓA ĐƠN ======================
+        }   
         private void LoadAllHoaDon()
         {
             var danhSach = _hoaDonService.GetAllHoaDon();
@@ -77,7 +76,7 @@ namespace QlyNhaHang.Forms
                 {
                     MessageBox.Show("Hủy hóa đơn thành công!", "Thành công",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadAllHoaDon(); // Refresh danh sách
+                    LoadAllHoaDon(); 
                 }
                 else
                 {
@@ -98,8 +97,7 @@ namespace QlyNhaHang.Forms
         private void dgvHoaDon_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
-            int maHD = Convert.ToInt32(dgvHoaDon.Rows[e.RowIndex].Cells["Mã HD"].Value);
-            // Mở form sửa hoặc xem chi tiết
+            int maHD = Convert.ToInt32(dgvHoaDon.Rows[e.RowIndex].Cells["Mã HD"].Value);      
             frmSuaHoaDon f = new frmSuaHoaDon(maHD);
             if (f.ShowDialog() == DialogResult.OK)
             {
@@ -114,7 +112,6 @@ namespace QlyNhaHang.Forms
             cboTrangThai.Items.Add("DaThanhToan");
             cboTrangThai.SelectedIndex = 0;
 
-            // Mặc định tìm theo 7 ngày gần nhất
             dtpTuNgay.Value = DateTime.Now.AddDays(-7);
             dtpDenNgay.Value = DateTime.Now;
         }
@@ -189,15 +186,13 @@ namespace QlyNhaHang.Forms
                         using (var workbook = new XLWorkbook())
                         {
                             var worksheet = workbook.Worksheets.Add("Danh sách Hóa đơn");
-
-                            // Tiêu đề
+                            
                             worksheet.Cell(1, 1).Value = "DANH SÁCH HÓA ĐƠN";
                             worksheet.Range("A1:H1").Merge();
                             worksheet.Cell(1, 1).Style.Font.Bold = true;
                             worksheet.Cell(1, 1).Style.Font.FontSize = 16;
                             worksheet.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                            // Copy dữ liệu từ DataGridView
                             for (int i = 0; i < dgvHoaDon.Columns.Count; i++)
                             {
                                 worksheet.Cell(3, i + 1).Value = dgvHoaDon.Columns[i].HeaderText;
@@ -211,8 +206,6 @@ namespace QlyNhaHang.Forms
                                     worksheet.Cell(i + 4, j + 1).Value = dgvHoaDon.Rows[i].Cells[j].Value?.ToString();
                                 }
                             }
-
-                            // Auto fit cột
                             worksheet.Columns().AdjustToContents();
 
                             workbook.SaveAs(sfd.FileName);
@@ -257,7 +250,6 @@ namespace QlyNhaHang.Forms
 
             dgvHoaDon.DataSource = dt;
 
-            // Format cột tiền
             if (dgvHoaDon.Columns["Tổng tiền"] != null) dgvHoaDon.Columns["Tổng tiền"].DefaultCellStyle.Format = "N0";
             if (dgvHoaDon.Columns["Giảm giá"] != null) dgvHoaDon.Columns["Giảm giá"].DefaultCellStyle.Format = "N0";
             if (dgvHoaDon.Columns["Thanh toán"] != null) dgvHoaDon.Columns["Thanh toán"].DefaultCellStyle.Format = "N0";
@@ -314,8 +306,8 @@ namespace QlyNhaHang.Forms
                 if (success)
                 {
                     MessageBox.Show("Thanh toán hóa đơn thành công!", "Thành công",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadAllHoaDon(); // Refresh danh sách
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadAllHoaDon(); 
                 }
                 else
                 {

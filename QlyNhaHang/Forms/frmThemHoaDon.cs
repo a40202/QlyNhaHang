@@ -109,7 +109,7 @@ namespace QlyNhaHang.Forms
                     MaNV = CurrentUser.MaNV,
                     NgayLap = dtpNgayLap.Value,
                     TongTien = tongTien,
-                    GiamGia = tienGiam,           // Lưu số tiền giảm
+                    GiamGia = tienGiam,           
                     ThanhToan = thanhToan,
                     TrangThai = cboTrangThai.SelectedItem?.ToString() ?? "ChuaThanhToan"
                 };
